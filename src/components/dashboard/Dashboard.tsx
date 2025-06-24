@@ -37,7 +37,12 @@ export function Dashboard() {
         toast.error('Errore nel caricamento dei portfolio')
         console.error('Error fetching portfolios:', error)
       } else {
-        setPortfolios(data || [])
+        // Cast dei dati per assicurare il tipo corretto
+        const typedPortfolios = (data || []).map(portfolio => ({
+          ...portfolio,
+          visibility_status: portfolio.visibility_status as 'draft' | 'published_private' | 'published_public'
+        }))
+        setPortfolios(typedPortfolios)
       }
     } catch (error) {
       toast.error('Errore di connessione')
