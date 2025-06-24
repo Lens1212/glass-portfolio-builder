@@ -4,7 +4,8 @@ import { GlassCard } from '@/components/ui/glass-card'
 import { GlassButton } from '@/components/ui/glass-button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { TrendingUp, Clock, Filter, Search } from 'lucide-react'
+import { TrendingUp, Clock, Filter, Search, ArrowLeft, User } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface FeedHeaderProps {
   sortBy: 'recent' | 'popular'
@@ -28,6 +29,8 @@ export function FeedHeader({
   selectedTags,
   onTagsChange 
 }: FeedHeaderProps) {
+  const navigate = useNavigate()
+  
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
       onTagsChange(selectedTags.filter(t => t !== tag))
@@ -40,9 +43,21 @@ export function FeedHeader({
     <GlassCard className="p-6 mb-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-white">
-            Esplora Portfolio
-          </h1>
+          <div className="flex items-center space-x-4">
+            <GlassButton 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="text-white/70 hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              I Miei Portfolio
+            </GlassButton>
+            <div className="h-6 w-px bg-white/20"></div>
+            <h1 className="text-3xl font-bold text-white">
+              Esplora Portfolio
+            </h1>
+          </div>
           
           <Tabs value={sortBy} onValueChange={(value) => onSortChange(value as 'recent' | 'popular')}>
             <TabsList className="bg-white/10 border-white/20">

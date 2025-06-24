@@ -20,6 +20,7 @@ interface PublicPortfolio {
   user_display_name?: string
   user_avatar_url?: string
   user_public_profile?: any
+  visibility_status: string
 }
 
 interface PortfolioFeedProps {

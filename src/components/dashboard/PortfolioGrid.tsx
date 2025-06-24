@@ -3,13 +3,13 @@ import React from 'react'
 import { GlassCard } from '@/components/ui/glass-card'
 import { GlassButton } from '@/components/ui/glass-button'
 import { Badge } from '@/components/ui/badge'
-import { Eye, Edit, ExternalLink, Trash2, Calendar } from 'lucide-react'
+import { Eye, Edit, ExternalLink, Trash2, Calendar, Lock, Globe, FileText } from 'lucide-react'
 
 interface Portfolio {
   id: string
   name: string
   description?: string
-  is_public?: boolean
+  visibility_status: 'draft' | 'published_private' | 'published_public'
   created_at: string
   slug: string
 }
@@ -17,6 +17,35 @@ interface Portfolio {
 interface PortfolioGridProps {
   portfolios: Portfolio[]
   loading?: boolean
+}
+
+const getStatusInfo = (status: string) => {
+  switch (status) {
+    case 'draft':
+      return {
+        label: 'Bozza',
+        className: 'bg-gray-500/20 text-gray-300 border-gray-400/30',
+        icon: FileText
+      }
+    case 'published_private':
+      return {
+        label: 'Pubblicato Privato',
+        className: 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30',
+        icon: Lock
+      }
+    case 'published_public':
+      return {
+        label: 'Pubblico',
+        className: 'bg-green-500/20 text-green-300 border-green-400/30',
+        icon: Globe
+      }
+    default:
+      return {
+        label: 'Bozza',
+        className: 'bg-gray-500/20 text-gray-300 border-gray-400/30',
+        icon: FileText
+      }
+  }
 }
 
 export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
@@ -64,62 +93,63 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {portfolios.map((portfolio) => (
-        <GlassCard key={portfolio.id} className="p-6 space-y-4 hover:bg-white/15 transition-all duration-300">
-          <div className="flex items-start justify-between">
-            <h3 className="text-lg font-semibold text-white truncate">
-              {portfolio.name}
-            </h3>
-            {portfolio.is_public !== undefined && (
+      {portfolios.map((portfolio) => {
+        const statusInfo = getStatusInfo(portfolio.visibility_status)
+        const StatusIcon = statusInfo.icon
+        
+        return (
+          <GlassCard key={portfolio.id} className="p-6 space-y-4 hover:bg-white/15 transition-all duration-300">
+            <div className="flex items-start justify-between">
+              <h3 className="text-lg font-semibold text-white truncate">
+                {portfolio.name}
+              </h3>
               <Badge 
-                variant={portfolio.is_public ? "default" : "secondary"}
-                className={portfolio.is_public 
-                  ? "bg-green-500/20 text-green-300 border-green-400/30" 
-                  : "bg-yellow-500/20 text-yellow-300 border-yellow-400/30"
-                }
+                variant="secondary"
+                className={statusInfo.className}
               >
-                {portfolio.is_public ? 'Pubblico' : 'Privato'}
+                <StatusIcon className="h-3 w-3 mr-1" />
+                {statusInfo.label}
               </Badge>
-            )}
-          </div>
-          
-          {portfolio.description && (
-            <p className="text-white/70 text-sm line-clamp-2">
-              {portfolio.description}
-            </p>
-          )}
-          
-          <div className="flex items-center space-x-2 text-white/60 text-xs">
-            <Calendar className="h-3 w-3" />
-            <span>
-              Creato il {new Date(portfolio.created_at).toLocaleDateString('it-IT')}
-            </span>
-          </div>
-          
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex space-x-2">
-              <GlassButton size="sm" variant="ghost">
-                <Edit className="h-3 w-3" />
-              </GlassButton>
-              
-              {portfolio.is_public && (
-                <GlassButton size="sm" variant="ghost">
-                  <ExternalLink className="h-3 w-3" />
-                </GlassButton>
-              )}
-              
-              <GlassButton size="sm" variant="ghost" className="hover:bg-red-500/20">
-                <Trash2 className="h-3 w-3" />
-              </GlassButton>
             </div>
             
-            <GlassButton size="sm" variant="primary">
-              <Eye className="h-3 w-3 mr-1" />
-              Visualizza
-            </GlassButton>
-          </div>
-        </GlassCard>
-      ))}
+            {portfolio.description && (
+              <p className="text-white/70 text-sm line-clamp-2">
+                {portfolio.description}
+              </p>
+            )}
+            
+            <div className="flex items-center space-x-2 text-white/60 text-xs">
+              <Calendar className="h-3 w-3" />
+              <span>
+                Creato il {new Date(portfolio.created_at).toLocaleDateString('it-IT')}
+              </span>
+            </div>
+            
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex space-x-2">
+                <GlassButton size="sm" variant="ghost">
+                  <Edit className="h-3 w-3" />
+                </GlassButton>
+                
+                {(portfolio.visibility_status === 'published_private' || portfolio.visibility_status === 'published_public') && (
+                  <GlassButton size="sm" variant="ghost">
+                    <ExternalLink className="h-3 w-3" />
+                  </GlassButton>
+                )}
+                
+                <GlassButton size="sm" variant="ghost" className="hover:bg-red-500/20">
+                  <Trash2 className="h-3 w-3" />
+                </GlassButton>
+              </div>
+              
+              <GlassButton size="sm" variant="primary">
+                <Eye className="h-3 w-3 mr-1" />
+                Visualizza
+              </GlassButton>
+            </div>
+          </GlassCard>
+        )
+      })}
     </div>
   )
 }

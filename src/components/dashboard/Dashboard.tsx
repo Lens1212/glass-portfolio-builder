@@ -10,7 +10,7 @@ interface Portfolio {
   id: string
   name: string
   description?: string
-  is_public?: boolean
+  visibility_status: 'draft' | 'published_private' | 'published_public'
   created_at: string
   slug: string
 }
@@ -30,7 +30,7 @@ export function Dashboard() {
     try {
       const { data, error } = await supabase
         .from('portfolios')
-        .select('id, name, description, created_at, slug')
+        .select('id, name, description, visibility_status, created_at, slug')
         .order('created_at', { ascending: false })
 
       if (error) {
