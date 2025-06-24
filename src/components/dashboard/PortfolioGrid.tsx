@@ -9,7 +9,7 @@ interface Portfolio {
   id: string
   name: string
   description?: string
-  is_public: boolean
+  is_public?: boolean
   created_at: string
   slug: string
 }
@@ -26,12 +26,12 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
         {[...Array(6)].map((_, i) => (
           <GlassCard key={i} className="p-6 animate-pulse">
             <div className="space-y-4">
-              <div className="h-4 bg-white/20 rounded w-3/4"></div>
-              <div className="h-3 bg-white/10 rounded w-full"></div>
-              <div className="h-3 bg-white/10 rounded w-2/3"></div>
+              <div className="h-6 bg-white/20 rounded w-3/4"></div>
+              <div className="h-4 bg-white/10 rounded w-full"></div>
+              <div className="h-4 bg-white/10 rounded w-2/3"></div>
               <div className="flex space-x-2">
-                <div className="h-8 bg-white/10 rounded w-16"></div>
-                <div className="h-8 bg-white/10 rounded w-16"></div>
+                <div className="h-8 bg-white/10 rounded w-20"></div>
+                <div className="h-8 bg-white/10 rounded w-20"></div>
               </div>
             </div>
           </GlassCard>
@@ -48,13 +48,14 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
             <Eye className="h-8 w-8 text-white/60" />
           </div>
           <h3 className="text-xl font-semibold text-white">
-            Nessun portfolio ancora
+            Nessun portfolio trovato
           </h3>
           <p className="text-white/70 max-w-md mx-auto">
-            Inizia creando il tuo primo portfolio dinamico. Scegli un template o parti da zero!
+            Inizia creando il tuo primo portfolio dinamico.
           </p>
-          <GlassButton variant="primary" className="mt-4">
-            Crea il tuo primo portfolio
+          <GlassButton variant="primary">
+            <Edit className="h-4 w-4 mr-2" />
+            Crea Portfolio
           </GlassButton>
         </div>
       </GlassCard>
@@ -69,15 +70,17 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
             <h3 className="text-lg font-semibold text-white truncate">
               {portfolio.name}
             </h3>
-            <Badge 
-              variant={portfolio.is_public ? "default" : "secondary"}
-              className={portfolio.is_public 
-                ? "bg-green-500/20 text-green-300 border-green-400/30" 
-                : "bg-yellow-500/20 text-yellow-300 border-yellow-400/30"
-              }
-            >
-              {portfolio.is_public ? 'Pubblico' : 'Privato'}
-            </Badge>
+            {portfolio.is_public !== undefined && (
+              <Badge 
+                variant={portfolio.is_public ? "default" : "secondary"}
+                className={portfolio.is_public 
+                  ? "bg-green-500/20 text-green-300 border-green-400/30" 
+                  : "bg-yellow-500/20 text-yellow-300 border-yellow-400/30"
+                }
+              >
+                {portfolio.is_public ? 'Pubblico' : 'Privato'}
+              </Badge>
+            )}
           </div>
           
           {portfolio.description && (
