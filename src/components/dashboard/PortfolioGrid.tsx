@@ -9,7 +9,7 @@ interface Portfolio {
   id: string
   name: string
   description?: string
-  is_published: boolean
+  is_public: boolean
   created_at: string
   slug: string
 }
@@ -70,13 +70,13 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
               {portfolio.name}
             </h3>
             <Badge 
-              variant={portfolio.is_published ? "default" : "secondary"}
-              className={portfolio.is_published 
+              variant={portfolio.is_public ? "default" : "secondary"}
+              className={portfolio.is_public 
                 ? "bg-green-500/20 text-green-300 border-green-400/30" 
                 : "bg-yellow-500/20 text-yellow-300 border-yellow-400/30"
               }
             >
-              {portfolio.is_published ? 'Pubblicato' : 'Bozza'}
+              {portfolio.is_public ? 'Pubblico' : 'Privato'}
             </Badge>
           </div>
           
@@ -99,7 +99,7 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
                 <Edit className="h-3 w-3" />
               </GlassButton>
               
-              {portfolio.is_published && (
+              {portfolio.is_public && (
                 <GlassButton size="sm" variant="ghost">
                   <ExternalLink className="h-3 w-3" />
                 </GlassButton>

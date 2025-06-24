@@ -3,11 +3,13 @@ import React from 'react'
 import { GlassCard } from '@/components/ui/glass-card'
 import { GlassButton } from '@/components/ui/glass-button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { LogOut, Plus, User } from 'lucide-react'
+import { LogOut, Plus, User, Compass } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 export function DashboardHeader() {
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <GlassCard className="p-4 mb-6">
@@ -30,6 +32,15 @@ export function DashboardHeader() {
         </div>
         
         <div className="flex items-center space-x-3">
+          <GlassButton 
+            variant="ghost" 
+            onClick={() => navigate('/feed')}
+            className="space-x-2"
+          >
+            <Compass className="h-4 w-4" />
+            <span>Esplora Feed</span>
+          </GlassButton>
+          
           <GlassButton variant="primary" className="space-x-2">
             <Plus className="h-4 w-4" />
             <span>Nuovo Portfolio</span>

@@ -12,41 +12,58 @@ export type Database = {
       portfolios: {
         Row: {
           content: Json
+          copy_count: number
+          cover_image_url: string | null
           created_at: string
           description: string | null
           id: string
-          is_published: boolean
           name: string
           slug: string
+          tags: string[] | null
           theme_settings: Json
           updated_at: string
           user_id: string
+          visibility_status: string
         }
         Insert: {
           content?: Json
+          copy_count?: number
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
-          is_published?: boolean
           name: string
           slug: string
+          tags?: string[] | null
           theme_settings?: Json
           updated_at?: string
           user_id: string
+          visibility_status?: string
         }
         Update: {
           content?: Json
+          copy_count?: number
+          cover_image_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
-          is_published?: boolean
           name?: string
           slug?: string
+          tags?: string[] | null
           theme_settings?: Json
           updated_at?: string
           user_id?: string
+          visibility_status?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "portfolios_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -56,6 +73,7 @@ export type Database = {
           display_name: string | null
           email: string | null
           id: string
+          public_profile: Json | null
           updated_at: string
         }
         Insert: {
@@ -65,6 +83,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id: string
+          public_profile?: Json | null
           updated_at?: string
         }
         Update: {
@@ -74,6 +93,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          public_profile?: Json | null
           updated_at?: string
         }
         Relationships: []
@@ -110,10 +130,66 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_portfolios: {
+        Row: {
+          content: Json | null
+          copy_count: number | null
+          cover_image_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          name: string | null
+          slug: string | null
+          tags: string[] | null
+          theme_settings: Json | null
+          updated_at: string | null
+          user_avatar_url: string | null
+          user_display_name: string | null
+          user_id: string | null
+          user_public_profile: Json | null
+          visibility_status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolios_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      copy_portfolio: {
+        Args: { source_portfolio_id: string; new_name?: string }
+        Returns: string
+      }
+      get_portfolio_by_slug: {
+        Args: { portfolio_slug: string }
+        Returns: {
+          id: string
+          name: string
+          slug: string
+          description: string
+          visibility_status: string
+          content: Json
+          theme_settings: Json
+          copy_count: number
+          tags: string[]
+          cover_image_url: string
+          created_at: string
+          updated_at: string
+          user_id: string
+          user_display_name: string
+          user_avatar_url: string
+          user_public_profile: Json
+        }[]
+      }
+      increment_copy_count: {
+        Args: { portfolio_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
