@@ -4,6 +4,7 @@ import { GlassCard } from '@/components/ui/glass-card'
 import { GlassButton } from '@/components/ui/glass-button'
 import { Badge } from '@/components/ui/badge'
 import { Eye, Edit, ExternalLink, Trash2, Calendar, Lock, Globe, FileText } from 'lucide-react'
+import { CreatePortfolioDialog } from '@/components/portfolio/CreatePortfolioDialog'
 
 interface Portfolio {
   id: string
@@ -17,6 +18,7 @@ interface Portfolio {
 interface PortfolioGridProps {
   portfolios: Portfolio[]
   loading?: boolean
+  onPortfolioCreated?: () => void
 }
 
 const getStatusInfo = (status: string) => {
@@ -48,7 +50,7 @@ const getStatusInfo = (status: string) => {
   }
 }
 
-export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
+export function PortfolioGrid({ portfolios, loading, onPortfolioCreated }: PortfolioGridProps) {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -82,74 +84,77 @@ export function PortfolioGrid({ portfolios, loading }: PortfolioGridProps) {
           <p className="text-white/70 max-w-md mx-auto">
             Inizia creando il tuo primo portfolio dinamico.
           </p>
-          <GlassButton variant="primary">
-            <Edit className="h-4 w-4 mr-2" />
-            Crea Portfolio
-          </GlassButton>
+          <CreatePortfolioDialog onPortfolioCreated={onPortfolioCreated} />
         </div>
       </GlassCard>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {portfolios.map((portfolio) => {
-        const statusInfo = getStatusInfo(portfolio.visibility_status)
-        const StatusIcon = statusInfo.icon
-        
-        return (
-          <GlassCard key={portfolio.id} className="p-6 space-y-4 hover:bg-white/15 transition-all duration-300">
-            <div className="flex items-start justify-between">
-              <h3 className="text-lg font-semibold text-white truncate">
-                {portfolio.name}
-              </h3>
-              <Badge 
-                variant="secondary"
-                className={statusInfo.className}
-              >
-                <StatusIcon className="h-3 w-3 mr-1" />
-                {statusInfo.label}
-              </Badge>
-            </div>
-            
-            {portfolio.description && (
-              <p className="text-white/70 text-sm line-clamp-2">
-                {portfolio.description}
-              </p>
-            )}
-            
-            <div className="flex items-center space-x-2 text-white/60 text-xs">
-              <Calendar className="h-3 w-3" />
-              <span>
-                Creato il {new Date(portfolio.created_at).toLocaleDateString('it-IT')}
-              </span>
-            </div>
-            
-            <div className="flex items-center justify-between pt-2">
-              <div className="flex space-x-2">
-                <GlassButton size="sm" variant="ghost">
-                  <Edit className="h-3 w-3" />
-                </GlassButton>
-                
-                {(portfolio.visibility_status === 'published_private' || portfolio.visibility_status === 'published_public') && (
-                  <GlassButton size="sm" variant="ghost">
-                    <ExternalLink className="h-3 w-3" />
-                  </GlassButton>
-                )}
-                
-                <GlassButton size="sm" variant="ghost" className="hover:bg-red-500/20">
-                  <Trash2 className="h-3 w-3" />
-                </GlassButton>
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <CreatePortfolioDialog onPortfolioCreated={onPortfolioCreated} />
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {portfolios.map((portfolio) => {
+          const statusInfo = getStatusInfo(portfolio.visibility_status)
+          const StatusIcon = statusInfo.icon
+          
+          return (
+            <GlassCard key={portfolio.id} className="p-6 space-y-4 hover:bg-white/15 transition-all duration-300">
+              <div className="flex items-start justify-between">
+                <h3 className="text-lg font-semibold text-white truncate">
+                  {portfolio.name}
+                </h3>
+                <Badge 
+                  variant="secondary"
+                  className={statusInfo.className}
+                >
+                  <StatusIcon className="h-3 w-3 mr-1" />
+                  {statusInfo.label}
+                </Badge>
               </div>
               
-              <GlassButton size="sm" variant="primary">
-                <Eye className="h-3 w-3 mr-1" />
-                Visualizza
-              </GlassButton>
-            </div>
-          </GlassCard>
-        )
-      })}
+              {portfolio.description && (
+                <p className="text-white/70 text-sm line-clamp-2">
+                  {portfolio.description}
+                </p>
+              )}
+              
+              <div className="flex items-center space-x-2 text-white/60 text-xs">
+                <Calendar className="h-3 w-3" />
+                <span>
+                  Creato il {new Date(portfolio.created_at).toLocaleDateString('it-IT')}
+                </span>
+              </div>
+              
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex space-x-2">
+                  <GlassButton size="sm" variant="ghost">
+                    <Edit className="h-3 w-3" />
+                  </GlassButton>
+                  
+                  {(portfolio.visibility_status === 'published_private' || portfolio.visibility_status === 'published_public') && (
+                    <GlassButton size="sm" variant="ghost">
+                      <ExternalLink className="h-3 w-3" />
+                    </GlassButton>
+                  )}
+                  
+                  <GlassButton size="sm" variant="ghost" className="hover:bg-red-500/20">
+                    <Trash2 className="h-3 w-3" />
+                  </GlassButton>
+                </div>
+                
+                <GlassButton size="sm" variant="primary">
+                  <Eye className="h-3 w-3 mr-1" />
+                  Visualizza
+                </GlassButton>
+              </div>
+            </GlassCard>
+          )
+        })}
+      </div>
     </div>
   )
 }

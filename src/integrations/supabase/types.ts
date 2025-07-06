@@ -19,7 +19,9 @@ export type Database = {
           id: string
           name: string
           slug: string
+          status: Database["public"]["Enums"]["portfolio_status"]
           tags: string[] | null
+          theme_config: Json | null
           theme_settings: Json
           updated_at: string
           user_id: string
@@ -34,7 +36,9 @@ export type Database = {
           id?: string
           name: string
           slug: string
+          status?: Database["public"]["Enums"]["portfolio_status"]
           tags?: string[] | null
+          theme_config?: Json | null
           theme_settings?: Json
           updated_at?: string
           user_id: string
@@ -49,7 +53,9 @@ export type Database = {
           id?: string
           name?: string
           slug?: string
+          status?: Database["public"]["Enums"]["portfolio_status"]
           tags?: string[] | null
+          theme_config?: Json | null
           theme_settings?: Json
           updated_at?: string
           user_id?: string
@@ -192,7 +198,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      portfolio_status: "draft" | "private" | "public"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -307,6 +313,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      portfolio_status: ["draft", "private", "public"],
+    },
   },
 } as const

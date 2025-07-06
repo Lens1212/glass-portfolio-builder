@@ -71,7 +71,11 @@ export function Dashboard() {
             </h2>
           </div>
           
-          <PortfolioGrid portfolios={portfolios} loading={loading} />
+          <PortfolioGrid 
+            portfolios={portfolios} 
+            loading={loading}
+            onPortfolioCreated={fetchPortfolios}
+          />
         </div>
       </div>
     </div>
