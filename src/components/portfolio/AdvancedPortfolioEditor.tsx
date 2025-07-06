@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { GlassCard } from '@/components/ui/glass-card'
@@ -18,7 +17,8 @@ import {
   Maximize2,
   Edit3,
   Copy,
-  MoreHorizontal
+  MoreHorizontal,
+  Mail
 } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
@@ -61,7 +61,7 @@ export function AdvancedPortfolioEditor({
   const [sections, setSections] = useState<Section[]>(initialData?.sections || [])
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
   const [currentDevice, setCurrentDevice] = useState('desktop')
-  const [portfolioStatus, setPortfolioStatus] = useState(initialData?.status || 'draft')
+  const [portfolioStatus, setPortfolioStatus] = useState<'draft' | 'published_private' | 'published_public'>(initialData?.status || 'draft')
   const [theme, setTheme] = useState(initialData?.theme || {
     primary: '#2563eb',
     secondary: '#64748b',
@@ -125,8 +125,8 @@ export function AdvancedPortfolioEditor({
     setSaving(true)
     try {
       const portfolioData = {
-        content: { sections },
-        theme_settings: theme,
+        content: { sections } as any,
+        theme_settings: theme as any,
         updated_at: new Date().toISOString()
       }
 
@@ -152,6 +152,10 @@ export function AdvancedPortfolioEditor({
 
   const previewPortfolio = () => {
     window.open(`/portfolio/${portfolioSlug}`, '_blank')
+  }
+
+  const handleStatusChange = (newStatus: string) => {
+    setPortfolioStatus(newStatus as 'draft' | 'published_private' | 'published_public')
   }
 
   const currentDeviceConfig = DEVICE_PRESETS.find(d => d.id === currentDevice)
@@ -204,7 +208,7 @@ export function AdvancedPortfolioEditor({
                 portfolioId={portfolioId}
                 portfolioSlug={portfolioSlug}
                 currentStatus={portfolioStatus}
-                onStatusChange={setPortfolioStatus}
+                onStatusChange={handleStatusChange}
               />
 
               {/* Action Buttons */}
