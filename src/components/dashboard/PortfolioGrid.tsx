@@ -1,10 +1,10 @@
-
 import React from 'react'
 import { GlassCard } from '@/components/ui/glass-card'
 import { GlassButton } from '@/components/ui/glass-button'
 import { Badge } from '@/components/ui/badge'
 import { Eye, Edit, ExternalLink, Trash2, Calendar, Lock, Globe, FileText } from 'lucide-react'
 import { CreatePortfolioDialog } from '@/components/portfolio/CreatePortfolioDialog'
+import { useNavigate } from 'react-router-dom'
 
 interface Portfolio {
   id: string
@@ -51,6 +51,12 @@ const getStatusInfo = (status: string) => {
 }
 
 export function PortfolioGrid({ portfolios, loading, onPortfolioCreated }: PortfolioGridProps) {
+  const navigate = useNavigate()
+
+  const openEditor = (portfolioId: string) => {
+    navigate(`/editor/${portfolioId}`)
+  }
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -131,7 +137,11 @@ export function PortfolioGrid({ portfolios, loading, onPortfolioCreated }: Portf
               
               <div className="flex items-center justify-between pt-2">
                 <div className="flex space-x-2">
-                  <GlassButton size="sm" variant="ghost">
+                  <GlassButton 
+                    size="sm" 
+                    variant="ghost"
+                    onClick={() => openEditor(portfolio.id)}
+                  >
                     <Edit className="h-3 w-3" />
                   </GlassButton>
                   
@@ -146,7 +156,11 @@ export function PortfolioGrid({ portfolios, loading, onPortfolioCreated }: Portf
                   </GlassButton>
                 </div>
                 
-                <GlassButton size="sm" variant="primary">
+                <GlassButton 
+                  size="sm" 
+                  variant="primary"
+                  onClick={() => openEditor(portfolio.id)}
+                >
                   <Eye className="h-3 w-3 mr-1" />
                   Modifica
                 </GlassButton>
