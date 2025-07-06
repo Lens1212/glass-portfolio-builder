@@ -148,7 +148,7 @@ export function PortfolioGrid({ portfolios, loading, onPortfolioCreated }: Portf
                 
                 <GlassButton size="sm" variant="primary">
                   <Eye className="h-3 w-3 mr-1" />
-                  Visualizza
+                  Modifica
                 </GlassButton>
               </div>
             </GlassCard>
